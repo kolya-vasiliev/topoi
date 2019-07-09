@@ -1,0 +1,722 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[a4paper,hmargin=2.5cm,vmargin=2.5cm]{geometry}
+\usepackage[english,russian]{babel}
+
+\usepackage{tikz-cd}
+
+\newtheorem{definition}{Определение}
+\newtheorem{notation}{Обозначение}
+\newtheorem{exercise}{Утверждение}
+\newtheorem{note}{Замечание}
+
+\tikzcdset{row sep/normal=1.5cm}
+\tikzcdset{column sep/normal=1.5cm}
+
+\begin{document}
+
+%%
+%% Title page
+%%
+\begin{center}
+
+\vspace{3.5cm}
+
+{\Large\bfseries
+Категорная логика
+\par}
+\vspace{1cm}
+\begin{abstract}
+В этом небольшом документе содержится общая информация о том, что такое топос, а также о том, как ввести в топосе пропозициональную логику. Изложение соответствует книге Гольдблатта (с третьей по шестую главу) и может быть использовано как сопроводительный материал --- здесь разобраны некоторые упражнения.
+\end{abstract}
+
+\vspace{5.5cm}
+
+\tableofcontents
+\end{center}
+\thispagestyle{empty}
+\pagebreak
+%%
+%% ===========================================================================
+%%
+\pagebreak
+
+\section{Введение}
+
+Некоторые категории похожи на категорию множеств больше, чем другие. Один из способов получить категорные аналоги привычных теоретико-множественных понятий --- потребовать от категории, чтобы она была топосом:
+
+\begin{definition}
+Топос --- это декартово замкнутая категория с классификатором подобъектов.
+\end{definition}
+
+Топосы обладают многими свойствами, присущими категории множеств, и категория множеств действительно является топосом. 
+В любом топосе оказываются определены многие понятия теории множеств 
+и верны многие теоремы, которые верны в категории множеств. 
+
+В топосе определены характеры подобъектов --- аналог характеристических функций подмножеств. Определены также поверобъекты, являющиеся обобщением множества всех подмножеств данного множества. В топосе определены пересечение, объединение и дополнение подобъектов --- аналоги операций с подмножествами. Морфизмы, являющиеся одновременно мониками и эпиками, в топосе оказываются изоморфизмами. Многие понятия и идеи, которые вообще-то можно определить в гораздо более общей ситуации, --- например, элемент объекта, подобъект, экстенсиональность, --- в топосах обретают смысл и подвижность.
+
+В категории с терминальным объектом можно определить элемент объекта следующим образом.
+
+\begin{definition}
+Элемент $x$ объекта $A$, $x\in A$ --- это стрелка из терминального объекта в $A$, $x\colon1\to A$. 
+\end{definition}
+
+(Например, в категории множеств элемент множества $A$ --- стрелка из фиксированного одноэлементного множества в $A$.)
+
+В топосах естественным образом определяется логика: морфизмы $1\to\Omega$ (где $\Omega$ --- классификатор подобъектов, определение которого дано ниже), то есть элементы $\Omega$, понимаются как значения истинности: на $\Omega$ в чисто категорных терминах вводятся конъюнкция, дизъюнкция, импликация и отрицание. Таким образом, если оценить в элементах $\Omega$ пропозициональные переменные, эта оценка естественно продолжается на все формулы с участием перечисленных операций. 
+
+Элементы $\Omega$ в любом топосе образуют ограниченную решётку. Оказывается, если некая формула верна при любой оценке в каком-нибудь топосе, то ее можно вывести в классической логике. Обратное, однако, неверно: не все теоремы классической логики истинны при любой оценке в любом топосе. В частности, аксиома $\alpha \vee \sim\alpha$ оказывается истинной при любой оценке ровно в тех ситуациях, когда элементы $\Omega$ образуют булеву алгебру. Аксиомы и теоремы интуиционистской логики истинны во всех топосах.
+\pagebreak
+
+\section{Декартово замкнутые категории}
+
+\begin{definition}
+Декартово замкнутая категория --- конечно полная категория с экспоненциальными объектами.
+\end{definition}
+
+Далее будут доказаны некоторые утверждения о декартово замкнутых категориях с начальным объектом.
+
+\begin{exercise}
+Для любого объекта $A$ верно $0\cong 0\times A$, то есть $0\times A$ является начальным объектом. 
+\end{exercise}
+\begin{proof}
+По определению экспоненциирования, для любого объекта $X$ есть биекция
+  $$Hom(0\times A, X) \cong Hom(0, X^A).$$
+Поскольку в правом классе всегда ровно один элемент, то и в левом тоже,
+поэтому $0\times A$ --- начальный объект.
+\end{proof}
+
+\begin{exercise}
+Если существует $f\colon A\to 0$, то $A\cong 0$.
+\end{exercise}
+
+\begin{proof}
+
+$pr_A\circ <f, 1_A> = 1_A$, как показывает правый треугольник в следующей диаграмме:
+\[
+\begin{tikzcd}
+& A \arrow{ld}{f}\arrow[dashrightarrow]{d}[description]{<f, 1_A>}\arrow{rd}{1_A} & \\
+0 & 0\times A \arrow{l}{pr_0} \arrow{r}{pr_A} & A
+\end{tikzcd}
+\]
+
+С другой стороны, $<f, 1_A>\circ\,pr_A = 1_{0\times A} \colon 0\times A\to 0\times A$, потому что есть только один морфизм из начального объекта в начальный. Поэтому $A\cong 0\times A$, и поскольку $0\times A$ --- начальный объект, то и $A$ --- начальный объект. 
+\end{proof}
+
+\begin{definition}
+Категория называется вырожденной, если все её объекты изоморфны.
+\end{definition}
+
+\begin{exercise}
+Если $0\cong 1$, то категория вырожденная.
+\end{exercise}
+\begin{proof}
+Поскольку начальные объекты изоморфны друг другу, достаточно доказать, что все объекты начальные. Из произвольного объекта $A$ получаем стрелку в $0$:
+
+\[
+\begin{tikzcd}
+A \arrow{r}{!_A}
+& 1 \arrow{d}{\cong} \\
+& 0
+\end{tikzcd}
+\]
+
+Из предыдущего утверждения следует, что $A$ --- начальный объект.\end{proof}
+
+\begin{exercise}
+Все морфизмы $f\colon 0\to A$ с $dom = 0$ являются мониками.
+\end{exercise}
+\begin{proof}
+Пусть $f\circ g = f\circ h$ для каких-то $g$ и $h$:
+
+\[
+\begin{tikzcd}
+B \arrow[shift left=1ex, bend left=10]{r}{g} \arrow[shift right=1ex, bend right=10]{r}{h} & 0 \arrow{r}{f} & A
+\end{tikzcd}
+\]
+
+$B$ --- начальный объект, потому что из него есть стрелка
+в начальный. Но тогда $g = h$, поскольку в любой объект из начального объекта есть только одна стрелка.\end{proof}
+
+\begin{exercise}
+$A^0\cong 1$, то есть $A^0$ --- терминальный объект.
+\end{exercise}
+\begin{proof}
+По определению экспоненциирования, для любого объекта $X$
+  $$Hom(X\times 0, A) \cong Hom(X, A^0).$$
+Поскольку $X\times 0$ --- начальный объект, то в левом классе ровно один элемент. Следовательно, для любого $X$ есть ровно одно отображение $!_X\colon X\to A^0$. 
+\end{proof}
+
+\begin{exercise}
+$1^A\cong 1$, то есть $1^A$ --- терминальный объект.
+\end{exercise}
+\begin{proof}
+По определению экспоненциирования, для любого объекта $X$
+  $$Hom(X\times A, 1) \cong Hom(X, 1^A).$$
+В левом классе ровно один элемент, поскольку из любого объекта есть ровно одно отображение в $1$. Следовательно, для любого $X$ есть ровно одно отображение $!_X\colon X\to 1^A$. 
+\end{proof}
+
+\pagebreak
+\section{Уравнители и моники}
+
+Напомним некоторые факты из теории категорий.
+
+\begin{exercise}
+Любой уравнитель --- моника.
+\end{exercise}
+\begin{proof}
+Пусть $f$ уравнивает $g$ и $h$, $g\circ f = h\circ f$, и возьмем произвольную пару стрелок $p$, $q$, для которых
+$f\circ p = f\circ q$.
+
+\[
+\begin{tikzcd}
+E \arrow{r}{f} 
+& A \arrow[shift left=1ex, bend left=10]{r}{g} \arrow[shift right=1ex, bend right=10]{r}{h} & B \\
+X \arrow[shift left=1ex, bend left=10]{u}{p} \arrow[shift right=1ex, bend right=10]{u}{q} \arrow{ru}{f\circ p}
+\end{tikzcd}
+\]
+
+Поскольку $g\circ f \circ p = h\circ f \circ p$, то по определению уравнителя, существует ровно один морфизм $X\to E$, при котором треугольник в этой диаграмме коммутирует. Поэтому из $f\circ p = f\circ q$ сразу следует $p = q$, то есть $f$ --- моника.
+\end{proof}
+
+\begin{exercise}
+Эпические уравнители --- изоморфизмы.
+\end{exercise}
+\begin{proof}
+Пусть $f\colon E\to A$ --- эпика, уравнивающая $g$ и $h$. В этом случае сразу верно, что $g = h$, и поэтому из того, что $E$ --- уравнитель, следует, что любая стрелка с концом в $A$ пропускается через $f$. В частности, должна сущестовать стрелка $p\colon A\to E$, при которой треугольник в этой диаграмме коммутативный:
+
+\[
+\begin{tikzcd}
+E \arrow{r}{f} 
+& A \arrow[shift left=1ex, bend left=10]{r}{g} \arrow[shift right=1ex, bend right=10]{r}{h} & B \\
+A \arrow[dashrightarrow]{u}{p} \arrow{ru}{1_A}
+\end{tikzcd}
+\]
+
+Из диаграммы получаем $f\circ p = 1_A$, откуда 
+$f\circ p \circ f = f = f\circ 1_A$. Но по предыдущему утверждению $f$ --- моника, и на нее можно сократить слева: $p\circ f = 1_A$. Получается, $f^{-1}=p$.  \end{proof}
+
+\pagebreak
+\section{Подобъекты и характеры}
+
+\begin{definition}
+Подобъект объекта $A$ --- класс по отношению эквивалентности,
+заданному на всех мониках с концом A: моники $f$ и $g$ эквивалентны (обозначение: $f\cong g$), если пропускаются друг через друга, $f = g\circ p$, $g = f\circ q$ для некоторых $p$ и $q$. 
+\[
+\begin{tikzcd}
+X \arrow[shift right=1ex, bend right=10]{d}{p} \arrow[tail]{r}{f}
+& A \\
+Y \arrow[tail]{ur}{g}  \arrow[shift right=1ex, bend right=10]{u}{q}
+\end{tikzcd}
+\]
+\end{definition}
+
+\begin{note} $p$ и $q$ взаимнообратны, а $X\cong Y$.
+\end{note}
+\begin{proof} Поскольку $f$ --- моника, её можно сократить:
+$$f\circ 1_X = f = g\circ p = f\circ q\circ p.$$
+Аналогично, $1_Y = p\circ q$.
+\end{proof}
+
+\begin{definition}
+$[f]\subseteq [g]$, если $f$ пропускается через $g$.  
+\end{definition}
+\begin{proof}
+Докажем, что не зависит от выбора представителей классов. Пусть $f_1\cong f_2$ и $g_1\cong g_2$, и $f_1$ = $g_1\circ h$. Крайние треугольники в этой диаграмме существуют благодаря тому, что соответствующие стрелки, ведущие в $A$, эквивалентны:
+
+\[
+\begin{tikzcd}
+X_2 \arrow[tail]{dr}{f_2} \arrow{r}{h_1}
+& X_1 \arrow[tail]{d}{f_1} \arrow{r}{h}
+& Y_1 \arrow[tail]{dl}{g_1} \arrow{r}{h_2} 
+& Y_2 \arrow[tail, bend left=10]{dll}{g_2} \\
+& A
+\end{tikzcd}
+\]
+
+Получается, $f_2 = g_2\circ h_2\circ h \circ h_1$, так что $f_2$ пропускается через $g_2$.
+\end{proof}
+
+Собрание всех подобъектов $A$ обозначается $Sub(A)$. Отношение $\subseteq$ превращает $Sub(A)$ в частично упорядоченное множество, а в топосе $Sub(A)$ оказывается ограниченной решёткой, meet и join которой --- пересечение и объединение подобъектов. 
+
+\begin{definition}
+Классификатор подобъектов --- объект $\Omega$ и морфизм $true$, такие что
+для любой моники $f\colon A\rightarrowtail B$ существует единственный морфизм $\chi_f\colon B\to \Omega$, для которого следующая диаграмма --- пулбэк: 
+
+\[
+\begin{tikzcd}
+A \arrow{d}{!_A} \arrow[tail]{r}{f}
+& B \arrow{d}{\chi_f} \\
+1 \arrow{r}{true}
+& \Omega
+\end{tikzcd}
+\]
+
+\end{definition}
+$\chi_f$ называют характером $f$. Стрелку $true$ ещё обозначают $\top$. Композиция $true\,\circ\,!_A$ обозначается $true_A$. Докажем некоторые факты о классификаторе.
+
+\begin{exercise}
+Характером $true\colon 1\rightarrowtail \Omega$ является тождественный морфизм $1_\Omega$, 
+то есть $\chi_{true} = 1_\Omega$.
+\end{exercise}
+\begin{proof}
+Диаграмма коммутирует:
+
+\[
+\begin{tikzcd}
+1 \arrow{d}{!_1} \arrow[tail]{r}{true}
+& \Omega \arrow{d}{1_\Omega} \\
+1 \arrow{r}{true}
+& \Omega
+\end{tikzcd}
+\]
+
+Кроме того, пусть даны $f\colon X\to \Omega$ и $g\colon X\to 1$, такие что
+периметр коммутирует:
+
+\[
+\begin{tikzcd}
+X
+\arrow[bend left]{drr}{f}
+\arrow[bend right]{ddr}{g}
+\arrow[dashrightarrow]{dr}{g}
+& & \\
+& 1 \arrow{d}{!_1} \arrow[tail]{r}{true}
+& \Omega \arrow{d}{1_\Omega} \\
+& 1 \arrow{r}{true}
+& \Omega
+\end{tikzcd}
+\]
+
+В таком случае $f = true\circ g$, так что треугольники в 
+этой диаграмме коммутируют. Кроме того, $g$ --- единственная
+стрелка, при которой это происходит: для произвольной стрелки $h$
+в правом треугольнике $h = !_1\circ h = g$.
+
+\[
+\begin{tikzcd}
+X
+\arrow[bend left]{drr}{f}
+\arrow[bend right]{ddr}{g}
+\arrow[dashrightarrow]{dr}{h}
+& & \\
+& 1 \arrow{d}{!_1} \arrow[tail]{r}{true}
+& \Omega \arrow{d}{1_\Omega} \\
+& 1 \arrow{r}{true}
+& \Omega
+\end{tikzcd}
+\]
+
+\end{proof}
+
+\begin{exercise}
+Характером $1_\Omega$ является $true_\Omega$, 
+то есть $\chi_{1_\Omega} = true\,\circ\,!_\Omega$.
+\end{exercise}
+\begin{proof}
+Диаграмма коммутирует:
+
+\[
+\begin{tikzcd}
+\Omega \arrow{d}{!_\Omega} \arrow[tail]{r}{1_\Omega}
+& \Omega \arrow{d}{true\,\circ\,!_\Omega} \\
+1 \arrow{r}{true}
+& \Omega
+\end{tikzcd}
+\]
+
+С другой стороны, пусть при $f\colon X\to \Omega$ и $g\colon X\to 1$ 
+периметр коммутирует:
+
+\[
+\begin{tikzcd}
+X
+\arrow[bend left]{drr}{f}
+\arrow[bend right]{ddr}{g}
+\arrow[dashrightarrow]{dr}{f}
+& & \\
+& \Omega \arrow{d}{!_\Omega} \arrow[tail]{r}{1_\Omega}
+& \Omega \arrow{d}{true\,\circ\,!_\Omega} \\
+& 1 \arrow{r}{true}
+& \Omega
+\end{tikzcd}
+\]
+
+Тогда $true\,\circ\,!_\Omega\,\circ f = true\circ g$. Поскольку $true$, будучи
+морфизмом из терминального объекта, является моникой, его можно сократить
+слева: $!_\Omega\,\circ\,f = g$. Поэтому треугольники в этой диаграмме коммутируют.
+Из-за тождественного морфизма в верхнем треугольнике ничего кроме $f$ выбрать
+не получится.
+\end{proof}
+
+\begin{exercise}
+Для любой стрелки $f\colon A\to B$ верно $true_B\circ f = true_A$.
+
+\[
+\begin{tikzcd}
+A \arrow{rd}{true_A} \arrow{r}{f}
+& B \arrow{d}{true_B} \\
+& \Omega
+\end{tikzcd}
+\]
+\end{exercise}
+
+\begin{proof}
+Дело в том, что $true_A = true\,\circ !_A$, а $true_B\circ f = true\,\circ !_B\circ f$,
+но $!_A = !_B\circ f$, поскольку обе стрелки идут из A в терминальный объект.
+\end{proof}
+
+\begin{exercise}
+Характеры моник $f\colon A\rightarrowtail D$ и $g\colon B\rightarrowtail D$ равны, $\chi_f~=~\chi_g$,  тогда и только тогда, когда $f\cong g$.
+\end{exercise}
+\begin{proof} Пусть $\chi_f=\chi_g$. Тогда в этой диаграмме внутренний квадрат --- пулбэк, а внешний коммутирует (потому что тоже пулбэк), поэтому существует $h$, пропускающая $g$ через $f$:
+
+\[
+\begin{tikzcd}
+B
+\arrow[bend left, tail]{drr}{g}
+\arrow[bend right]{ddr}{!_B}
+\arrow[dashrightarrow]{dr}{h}
+& & \\
+& A \arrow{d}{!_A} \arrow[tail]{r}{f}
+& \Omega \arrow{d}{\chi_f} \\
+& 1 \arrow{r}{true}
+& \Omega
+\end{tikzcd}
+\]
+
+Аналогично $f$ пропускается через $g$, и поэтому $f\cong g$. С другой стороны, если $f\cong g$, то стрелка $h$ на приведенной диаграмме существует --- с её помощью покажем коммутативность периметра: 
+$$\chi_f\circ g = \chi_f\circ f\circ h = true\,\circ\, !_A\circ h = true\,\circ\,!_B.$$ 
+
+Пусть $p$, $!_C$ --- пара стрелок, с которыми периметр у этой диаграммы коммутирует:
+
+\[
+\begin{tikzcd}
+C \arrow[bend left]{ddrrr}{p}
+\arrow[bend right]{dddrr}{!_C}
+\arrow[dashrightarrow]{dr}{t}
+ & & & & \\
+& A
+\arrow[bend left, tail]{drr}{f}
+\arrow[bend right]{ddr}{!_A}
+\arrow{dr}{h^{-1}}
+& & & \\
+& & B \arrow{d}{!_B} \arrow[tail]{r}{g}
+& \Omega \arrow{d}{\chi_f} \\
+& & 1 \arrow{r}{true}
+& \Omega
+\end{tikzcd}
+\]
+
+Морфизм $t$ существует, потому что квадрат с вершиной в $A$ --- пулбэк, и поэтому $p =f \circ t$. Морфизм $h^{-1}$ существует и треугольники с ним коммутируют потому, что по условию $f$ пропускается через $g$. Все левые треугольники коммутируют автоматически из-за терминального объекта в одной из вершин. Таким образом, $h^{-1}\circ t$ --- искомая стрелка, делающая оба внешних треугольника коммутативными. Если $z$ --- ещё одна такая стрелка, то есть $g \circ z = p$, то $f\circ h\circ z = p$ --- значит, $h\circ z = t$ в силу единственности $t$ c условием $f\circ t = p$. Но тогда  $z = h^{-1}\circ h\circ z = h^{-1}\circ t$, что и требовалось.\end{proof}
+
+
+Напомним, что изоморфизмы в любой категории являются мониками и эпиками. Если, например, для изоморфизма $f$ верно $f\circ g = f\circ h$, то 
+$$g = f^{-1}\circ f\circ g = f^{-1}\circ f\circ h = h,$$ 
+то есть $f$ --- моника. Эпичность $f$ доказывается аналогично. 
+\begin{exercise}
+Эпические моники в топосе --- изоморфизмы.
+\end{exercise}
+\begin{proof}
+Ранее было доказано, что эпические уравнители --- изоморфизмы; поэтому достаточно показать, что любая моника $f\colon A\rightarrowtail B$ что-нибудь уравнивает. Покажем, что она уравнивает свой характер с $true_B$. Заметим, что $\chi_f\circ f = true_A = true_B\circ f$.
+
+\[
+\begin{tikzcd}
+X
+\arrow[bend left]{drr}{g}
+\arrow[bend right]{ddr}{!_X}
+\arrow[dashrightarrow]{dr}{h}
+& & \\
+& A \arrow{d}{!_A} \arrow[tail]{r}{f}
+& B \arrow{d}{\chi_f} \arrow{ld}{!_B} \\
+& 1 \arrow{r}{true}
+& \Omega
+\end{tikzcd}
+\]
+
+Пусть есть $g\colon X\to B$, такой что $\chi_f\circ g = true_B\circ g$. Но $true_B \circ g = true_X$, так что $\chi_f\circ g = true_X$ --- периметр диаграммы коммутирует. Значит, согласно определению пулбэка, существует морфизм $h$, для которого верно $g=f\circ h$. Такой морфизм оказывается единственным, потому что правый треугольник в диаграмме коммутирует при любом морфизме на месте $h$. Таким образом, $f$ --- уравнитель.\end{proof}
+
+\begin{exercise}
+$true$ уравнивает $1_\Omega$ и $true_\Omega$.
+\end{exercise}
+\begin{proof}
+$$1_\Omega\circ true = true \circ 1_1 = true\,\circ\, !_\Omega\circ true = true_\Omega\circ true$$
+
+\[
+\begin{tikzcd}
+1 \arrow[shift right=1ex, bend right=15]{rr}{1_1} \arrow{r}{true} 
+& \Omega \arrow[shift left=1ex, bend left=15]{rr}{1_\Omega} \arrow{r}{!_\Omega} & 1
+\arrow{r}{true} & \Omega
+\end{tikzcd}
+\]
+
+Кроме того, пусть для некоторого $h\colon X\to \Omega$ выполняется $1_\Omega\circ h = true_\Omega\circ h$, то есть $h=true\,\circ\, !_\Omega\circ h = true\,\circ\,!_A$. Последнее означает, что $h$ пропускается через $true$ с помощью $!_A$. Другую стрелку взять не получится, потому что конец необходимой стрелки --- терминальный объект.
+
+\[
+\begin{tikzcd}
+1  \arrow{r}{true} 
+& \Omega \arrow[shift left=1ex, bend left=15]{rr}{1_\Omega} \arrow{r}{!_\Omega} & 1
+\arrow{r}{true} & \Omega \\
+A \arrow[dashrightarrow]{u}{!_A}
+\arrow{ur}{h}
+\arrow{urr}{!_A}
+\end{tikzcd}
+\]
+
+\end{proof}
+
+\pagebreak
+\section{Точечные и бивалентные топосы}
+
+\begin{definition}
+Ненулевой объект --- объект, неизоморфный начальному. 
+\end{definition}
+
+\begin{definition}
+Непустой объект --- объект, у которого есть хотя бы один элемент.
+\end{definition}
+
+\begin{definition}
+Принцип экстенсиональности. Если $f\colon A\to B$, $g\colon A\to B$ --- пара разных стрелок с общими началом и концом, то существует элемент $x\colon 1\to A$, такой что $f \circ x \ne g \circ x$.
+\end{definition}
+
+\begin{definition}
+Точечный топос --- невырожденный топос, в котором выполнен принцип экстенсиональности. 
+\end{definition}
+
+\begin{exercise}
+В точечном топосе любой ненулевой объект непуст.
+\end{exercise}
+\begin{proof}
+Пусть $A$ --- ненулевой объект. Возьмем характеры стрелок $0_A\colon 0\to A$ и $1_A\colon A\to A$. Если бы $\chi_{0_A}$ оказалось равным $\chi_{1_A}$, это бы означало, что $0_A\cong 1_A$ и, следовательно, $0\cong A$, что противоречит выбору $A$. Значит, есть две различные стрелки c общим началом в $A$ и с общим концом. Из экстенсиональности следует существование элемента $x\colon 1\to A$, то есть $A$ непуст.\end{proof}
+
+\begin{definition}
+Ложь, стрелка $false$ или $\bot$ --- это характер $0_1\colon 0\rightarrowtail 1$.
+
+\[
+\begin{tikzcd}
+0 \arrow{d}{!_0} \arrow[tail]{r}{0_1}
+& 1 \arrow{d}{false} \\
+1 \arrow{r}{true}
+& \Omega
+\end{tikzcd}
+\]
+
+\end{definition}
+\begin{note}
+$0_1$ --- моника.
+\end{note}
+\begin{proof}
+Как было доказано, в декартово замкнутых категориях все стрелки с началом в начальном объекте --- моники.\end{proof}
+
+\begin{exercise}
+Морфизм $\bot\,\circ\,!_A$ --- характер $0_A$.
+\end{exercise}
+\begin{proof} Нужно доказать, что периметр --- пулбэк. Для этого достаточно доказать, что оба внутренних квадрата --- пулбэки.
+\[
+\begin{tikzcd}
+0 \arrow{d}{1_0}
+\arrow[bend right=30]{dd}{!_0} \arrow[tail]{r}{0_A}
+& A \arrow{d}{!_A}
+\arrow[bend left=30]{dd}{\bot\,\circ\,!_A} \\
+0 \arrow[tail]{r}{0_1} \arrow{d}{0_1} & 1 \arrow{d}{\bot} \\
+1 \arrow{r}{true}
+& \Omega
+\end{tikzcd}
+\]
+Нижний квадрат --- пулбэк, по определению лжи. Верхний квадрат коммутирует, потому что есть только одна стрелка $0\to 1$. Для вершины $X$ любого конуса над верхним квадратом существует стрелка $X\to 0$, что в декартово замкнутых категориях означает, что $X$ --- начальный объект, поэтому искомой стрелкой для любого конуса будет единственный морфизм $X\to 0$.\end{proof}
+
+\begin{exercise}
+В невырожденном топосе ложь и истина различны, $\bot\ne\top$.
+\end{exercise} 
+\begin{proof}
+$true$ --- характер $1_1\colon 1\rightarrowtail 1$, а $false$ --- характер $0_1\colon 0\rightarrowtail 1$, так что если $true = false$, то $1_1\cong 0_1$, и следовательно, $1\cong 0$, из чего следует вырожденность.
+\end{proof}
+
+\begin{definition}
+Невырожденный топос называют бивалентным, если $true$ и $false$ --- единственные элементы $\Omega$. 
+\end{definition}
+
+\begin{exercise}
+Точечный топос бивалентен.
+\end{exercise} 
+\begin{proof}
+Возьмем произвольный подобъект $1$:
+\[
+\begin{tikzcd}
+A \arrow{d}{!} \arrow[tail]{r}{h}
+& 1 \arrow{d}{\chi_f} \\
+1 \arrow{r}{true}
+& \Omega
+\end{tikzcd}
+\]
+
+Если $A\cong 0$, то $h=0_1$ и $\chi_h=\bot$.
+В противном случае $A$ непуст, и существует $f\colon 1\to A$.
+Следующие две диаграммы показывают, что $h\cong 1_1$.
+\[
+\begin{tikzcd}
+1 \arrow[tail]{r}{1_1} \arrow{d}{f}
+& 1 \\
+A \arrow[tail]{ur}{h} 
+\end{tikzcd}
+\]
+
+\[
+\begin{tikzcd}
+1 \arrow[tail]{r}{1_1} 
+& 1 \\
+A \arrow{u}{h} \arrow[tail]{ur}{h} 
+\end{tikzcd}
+\]
+
+Поэтому $\chi_h = true$.
+\end{proof}
+
+\pagebreak
+\section{Пропозициональная логика в топосе}
+
+\begin{definition}
+Отрицание $\neg$ --- характер лжи.
+\[
+\begin{tikzcd}
+1 \arrow{d}{1_1} \arrow[tail]{r}{\bot}
+& \Omega \arrow{d}{\neg} \\
+1 \arrow{r}{\top}
+& \Omega
+\end{tikzcd}
+\]
+\end{definition}
+
+\begin{definition}
+Конъюнкция $\cap\colon \Omega\times\Omega\to\Omega$ --- характер
+произведения пары $true$ $<\top, \top>\colon 1\rightarrowtail \Omega\times\Omega$.
+\end{definition}
+
+\begin{definition}
+Дизъюнкция $\cup\colon \Omega\times\Omega\to\Omega$ --- характер
+образа cтрелки $$[<true_\Omega, 1_\Omega>, <1_\Omega, true_\Omega>]\colon \Omega+\Omega\to \Omega\times\Omega.$$
+\end{definition}
+
+\begin{definition}
+Импликация $\Rightarrow\colon \Omega\times\Omega\to\Omega$ --- характер стрелки $e\colon\le\rightarrowtail\Omega\times\Omega$, которая
+уравнивает конъюнкцию и проекцию на первый множитель $pr_1\colon \Omega\times\Omega\to\Omega$.
+\end{definition}
+
+Теперь есть всё необходимое для работы с пропозициональной логикой в топосе.
+
+\begin{definition}
+$\xi$-оценка --- это функция $V\colon\Phi_0\to Hom_\xi(1, \Omega)$, которая каждой пропозициональной переменной $\pi_i$ сопоставляет значение истинности $V(\pi_i)\colon 1\to \Omega$. $V$ продолжается на все формулы $\Phi$ следующим образом:
+$$V(\sim\alpha)=\neg\circ V(\alpha)$$
+
+\[
+\begin{tikzcd}
+1  \arrow{rd}{V(\sim\alpha)} \arrow{r}{V(\alpha)}
+& \Omega \arrow{d}{\neg} \\
+& \Omega
+\end{tikzcd}
+\]
+
+$$V(\alpha\wedge\beta)=\cap\,\circ <V(\alpha),V(\beta)>$$
+
+\[
+\begin{tikzcd}
+& 1  \arrow[near end, bend right=15]{ld}{V(\alpha)} 
+\arrow[dashrightarrow]{d}[description]{<V(\alpha),V(\beta)>}
+\arrow[bend left=15]{rd}{V(\beta)} & \\ 
+\Omega 
+& \Omega\times\Omega 
+\arrow{l}{pr_1}  \arrow{d}{\cap} \arrow{r}{pr_2} & \Omega \\
+& \Omega &
+\end{tikzcd}
+\]
+
+
+$$V(\alpha\vee\beta)=\cup\,\circ <V(\alpha),V(\beta)>$$
+$$V(\alpha\supset\beta)=\,\Rightarrow\circ <V(\alpha),V(\beta)>$$
+\end{definition}
+
+\begin{notation}
+Если $<f, g>\colon 1\to \Omega\times\Omega$ --- пара значений истинности, то вводятся следующие обозначения:
+$$ f\cap g = \cap\,\circ<f, g> $$ 
+$$ f\cup g = \cup\,\circ<f, g> $$ 
+$$ f\Rightarrow g = \,\Rightarrow\circ<f, g> $$ 
+\end{notation}
+
+
+\begin{exercise}
+$\neg\circ \bot = \top$
+\end{exercise}
+\begin{proof}
+Сразу следует из определения отрицания $\neg$.
+\end{proof}
+
+\begin{exercise}
+$\neg\circ \top = \bot$
+\end{exercise}
+\begin{proof}
+
+Докажем, что периметр --- пулбэк, это будет означать, что
+характером $0_1$ является $\neg\circ \top$, из чего будет следовать утверждение, поскольку $\bot$ --- характер $0_1$ по определению.
+  
+\[
+\begin{tikzcd}
+0 \arrow{d}{0_1}
+ \arrow{r}{0_1}
+& 1 \arrow{d}{\top}
+ \\
+1 \arrow{r}{\bot} \arrow{d}{1_1} & \Omega \arrow{d}{\neg} \\
+1 \arrow{r}{\top}
+& \Omega
+\end{tikzcd}
+\]
+
+Нижний квадрат --- пулбэк, это определение отрицания $\neg$. Верхний квадрат --- тоже пулбэк, это отражённое определение лжи $\bot$. Поэтому периметр --- пулбэк.\end{proof}
+\begin{exercise} (Без доказательства.) Конъюнкция, дизъюнкция и импликация в применении к $\top$ и $\bot$ имеют обычные таблицы истинности. $\top\cap \bot = \bot$, $\bot\Rightarrow\top = \top$,...
+\end{exercise}
+
+Пусть $V\colon\Phi_0\to 2$ --- классическая оценка. Определим $\xi$-оценку $V'\colon\Phi\to Hom_\xi(1, \Omega)$:
+
+$V'(\pi_i)=\top$, если $V(\pi_i)=1$
+
+$V'(\pi_i)=\bot$, если $V(\pi_i)=0$
+
+\begin{exercise}
+Для любой формулы $\alpha\in\Phi$ верно либо $V'(\alpha)=\top$, $V'(\alpha)=\bot$, и кроме того, $V'(\alpha)=\top$ тогда и только тогда, когда $V(\alpha)=1$. 
+\end{exercise}
+
+\begin{proof}
+Доказывается с помощью структурной индукции по формуле $\alpha$, которая сработает, поскольку таблицы истинности у каждой из операций совпадают с классическими. 
+\end{proof}
+
+\begin{exercise}
+В любом топосе $\xi$ верно, что если $\xi\models\alpha$, то $\vdash_{CL}\alpha$. 
+\end{exercise}
+\begin{proof}
+Возьмем произвольную классическую оценку $V$ и ассоциированную с ней оценку $V'$. Поскольку $\xi\models\alpha$, то при оценке $V'$ формула $\alpha$ тоже верна: $V'(\alpha)=\top$, --- значит, согласно предыдущему утверждению, $V(\alpha) = 1$. Получается, $V(\alpha) = 1$ при любой классической оценке $V$, а из этого следует, что $\vdash_{CL}\alpha$.
+\end{proof}
+
+\begin{exercise}
+Если топос $\xi$ бивалентен, $\xi\models\alpha$ тогда и только тогда, когда $\vdash_{CL}\alpha$. 
+\end{exercise}
+\begin{proof}
+В одну сторону доказано в предыдущем утверждении. В обратную сторону, пусть $\vdash_{CL}\alpha$, то есть $\alpha$ верно при любой классической оценке. Пусть $V'$ --- произвольная $\xi$-оценка; построим по $V'$ классическую оценку $V$: $V(\pi_i)=1$, если $V'(\pi_i)=\top$, $V(\pi_i)=0$, если $V'(\pi_i)=\bot$, --- поскольку топос бивалентный, других значений истинности нет, и $V$ построится. Но тогда $V$ и $V'$ оказываются ассоциированными, и поскольку $\alpha$ верно при любой классической оценке, то $V(\alpha)=1$, и значит, $V'(\alpha)=\top$.
+\end{proof}
+
+Заметим, что существуют топосы, для которых из $\vdash_{CL}\alpha$ не следует $\xi\models\alpha$. Например, $\alpha\vee\sim\alpha$ не равно $\top$ при любой оценке в категории всех стрелок $Set^\to$. В этой категории у $\Omega$ три элемента: $0\mapsto 0$ ($\bot$), $\frac{1}{2}\mapsto 1$, $1\mapsto 1$ ($\top$). Тогда после подстановки $\frac{1}{2}\mapsto 1$ вместо $\alpha$ получаем:
+  $$(\frac{1}{2}\mapsto 1)\vee\sim(\frac{1}{2}\mapsto 1) = $$
+  $$(\frac{1}{2}\mapsto 1)\vee(0\mapsto 0) = $$
+  $$\frac{1}{2}\mapsto 1 $$
+
+\pagebreak
+
+
+\addcontentsline{toc}{section}{Список литературы}
+\begin{thebibliography}{99}
+\bibitem{goldbl}
+R.\,Goldblatt.
+Topoi: The Categorial Analysis of Logic.
+\end{thebibliography}
+\end{document}
